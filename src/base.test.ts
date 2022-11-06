@@ -37,6 +37,32 @@ describe('method addProps and getProps', () => {
 
     expect(user).toEqual(props.user);
   });
+
+  test('key can be any string but must be same in addProps and getProps', () => {
+    const req = {
+      body: {},
+    };
+    const someOtherKey = 'someOtherKey';
+    // using middleware name as key just makes it easier to track although it is not necessary
+    addProps<Middlewares.AuthenticateUser>(
+      req,
+      {
+        user: {
+          name: 'dummy',
+          id: 1,
+        },
+      },
+      someOtherKey
+    );
+
+    // inside route
+    const { user } = getProps<Middlewares.AuthenticateUser>(req, someOtherKey);
+    expect(user).toEqual({
+      name: 'dummy',
+      id: 1,
+    });
+  });
+
   test('two middlewares', () => {
     const req = {
       body: {},
@@ -176,5 +202,42 @@ describe('getAllProps', () => {
       authenticateUser: { user: { name: 'dummy', id: 1 } },
       attachRole: { role: 'admin' },
     });
+  });
+});
+
+describe('key must be attached in addProps before getProps', () => {
+  test('error should be raised if middleware did not addProps before getProps', () => {
+    const req = {
+      body: {},
+    };
+    expect(() => {
+      const { user } = getProps<Middlewares.AuthenticateUser>(
+        req,
+        'authenticateUser'
+      );
+    }).toThrow();
+  });
+  test('error should be raised if key is different', () => {
+    const req = {
+      body: {},
+    };
+
+    addProps<Middlewares.AuthenticateUser>(
+      req,
+      {
+        user: {
+          name: 'dummy',
+          id: 1,
+        },
+      },
+      'authenticateUser'
+    );
+
+    expect(() => {
+      const { user } = getProps<Middlewares.AuthenticateUser>(
+        req,
+        'some-different-key'
+      );
+    }).toThrow();
   });
 });
