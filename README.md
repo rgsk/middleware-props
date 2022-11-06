@@ -30,13 +30,15 @@ app.get('/', authenticateUser, (req, res, next) => {
 });
 ```
 
-### but above method becomes complicated once we start having a middleware chain and it becomes hard to track which middleware attached which properties
+### but above method becomes complicated once we start having middleware chain and it becomes hard to track which middleware attached which properties
 
 this package solves this problem
 
 ## Usage
 
-### basic
+### addProps and getProps methods
+
+#### basic
 
 ```typescript
 import express, { NextFunction, Request, Response } from 'express';
@@ -96,7 +98,7 @@ app.listen(PORT, () => {
 });
 ```
 
-### using multiple middlewares
+#### using multiple middlewares
 
 ```typescript
 import express, { NextFunction, Request, Response } from 'express';
@@ -188,6 +190,51 @@ const PORT = 8000;
 app.listen(PORT, () => {
   console.log(`listening on http://localhost:${PORT}`);
 });
+```
+
+### getAllProps method
+
+```typescript
+const req = {
+  body: {},
+};
+
+// inside first middleware
+addProps<Middlewares.AuthenticateUser>(
+  req,
+  {
+    user: {
+      name: 'dummy',
+      id: 1,
+    },
+  },
+  'authenticateUser'
+);
+
+// inside second middlware
+const { user: authenticatedUser } = getProps<Middlewares.AuthenticateUser>(
+  req,
+  'authenticateUser'
+);
+const getRole = (user: User): Role => {
+  return 'admin';
+};
+
+addProps<Middlewares.AttachRole>(
+  req,
+  {
+    role: getRole(authenticatedUser),
+  },
+  'attachRole'
+);
+
+const result = getAllProps(req);
+/*
+    {
+      authenticateUser: { user: { name: 'dummy', id: 1 } },
+      attachRole: { role: 'admin' },
+    }
+*/
 ```
 
 ## More
