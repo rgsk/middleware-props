@@ -42,8 +42,14 @@ const getRole = (user: User): Role => {
   return 'admin';
 };
 
+/**
+ *
+ * dependencies: authenticateUser
+ */
 const attachRole = (req: Request, res: Response, next: NextFunction) => {
   try {
+    // since attachRole middleware is used after authenticateUser middleware
+    // we can use properties attached by authenticateUser middleware
     const { user } = getProps<Middlewares.AuthenticateUser>(
       req,
       'authenticateUser'
