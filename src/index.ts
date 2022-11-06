@@ -1,1 +1,1 @@
-export const name = 'middleware-props';
+export { addProps, getProps, getAllProps } from './lib/methods';
