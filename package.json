@@ -1,0 +1,40 @@
+{
+  "name": "middleware-props",
+  "version": "1.0.0",
+  "description": "elegantly consume props attached by middlwares in your routes",
+  "source": "src/index.ts",
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "types": "dist/types.d.ts",
+  "license": "MIT",
+  "keywords": [
+    "express",
+    "middleware",
+    "props"
+  ],
+  "author": "Rahul Gupta <rahulguptasde@gmail.com> (https://www.skartner.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rgsk/middleware-props.git"
+  },
+  "homepage": "https://github.com/rgsk/middleware-props#readme",
+  "scripts": {
+    "prepublish": "parcel build",
+    "test": "jest",
+    "format": "prettier --write \"**/*.{ts,md}\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@parcel/packager-ts": "2.7.0",
+    "@parcel/transformer-typescript-types": "2.7.0",
+    "@types/jest": "^29.2.1",
+    "@types/node": "^18.11.9",
+    "jest": "^29.2.2",
+    "parcel": "^2.7.0",
+    "parcel-resolver-ts-base-url": "^1.3.0",
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  }
+}
